@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Coin Mentalist!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Base Styles & CSS Variables --- */
+        :root {
+            /* Default Theme (Mystic Indigo/Gold) */
+            --bg-color: #EBF4FF; /* indigo-50 */
+            --main-container-bg: #ffffff;
+            --main-container-border: #4C51BF; /* indigo-700 */
+            --main-container-shadow: #4C51BF;
+            --card-bg: #FEFCBF; /* yellow-100 */
+            --card-border: #F6E05E; /* yellow-400 */
+            --card-shadow: #ECC94B; /* yellow-500 */
+            --action-button-text: white;
+            --action-button-border: #4C51BF; /* indigo-700 */
+            --action-button-shadow: #4C51BF;
+            --action-button-hover-shadow: #434190; /* indigo-800 */
+            --action-button-active-shadow: #4C51BF;
+            --predict-button-bg: #6B46C1; /* purple-700 */
+            --predict-button-hover-bg: #553C9A; /* purple-800 */
+            --predict-button-active-bg: #44337A; /* purple-900 */
+            --reset-button-bg: #4FD1C5; /* teal-400 */
+            --reset-button-hover-bg: #38B2AC; /* teal-500 */
+            --reset-button-active-bg: #319795; /* teal-600 */
+            --result-area-bg: #FEFCBF; /* yellow-100 */
+            --result-area-border: #F6E05E; /* yellow-400 */
+            --result-area-shadow: #ECC94B; /* yellow-500 */
+            --result-text-color: #B7791F; /* yellow-800 */
+            --predicted-text-color: #744210; /* yellow-900 */
+            --thinking-text-color: #975A16; /* yellow-800 */
+            --heading-color: #4C51BF; /* indigo-700 */
+            --subheading-color: #5A67D8; /* indigo-600 */
+            --label-color: #6B46C1;
+            --footer-text-color: #718096; /* gray-600 */
+            --focus-ring-color: var(--predict-button-bg);
+            --theme-selector-bg: #FEFCBF;
+            --theme-selector-border: #F6E05E;
+            --theme-selector-text: #B7791F;
+            /* Coin colors */
+            --coin-gold: #ECC94B; /* yellow-500 */
+            --coin-silver: #CBD5E0; /* gray-400 */
+            --coin-shadow: rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- Theme Definitions --- */
+        body[data-theme="ocean-blue"] { --bg-color: #E0F2FE; --main-container-bg: #ffffff; --main-container-border: #075985; --main-container-shadow: #075985; --card-bg: #CFFAFE; --card-border: #67E8F9; --card-shadow: #22D3EE; --action-button-border: #075985; --action-button-shadow: #075985; --action-button-hover-shadow: #075985; --action-button-active-shadow: #075985; --predict-button-bg: #38BDF8; --predict-button-hover-bg: #0EA5E9; --predict-button-active-bg: #0284C7; --reset-button-bg: #2DD4BF; --reset-button-hover-bg: #14B8A6; --reset-button-active-bg: #0D9488; --result-area-bg: #A5F3FC; --result-area-border: #67E8F9; --result-area-shadow: #22D3EE; --result-text-color: #164E63; --predicted-text-color: #083344; --thinking-text-color: #155E75; --heading-color: #0C4A6E; --subheading-color: #155E75; --label-color: #155E75; --footer-text-color: #0369A1; --focus-ring-color: var(--predict-button-bg); --theme-selector-bg: #A5F3FC; --theme-selector-border: #67E8F9; --theme-selector-text: #155E75; --coin-gold: #38BDF8; --coin-silver: #94A3B8; }
+        body[data-theme="forest-green"] { --bg-color: #F0FFF4; --main-container-bg: #ffffff; --main-container-border: #2F855A; --main-container-shadow: #2F855A; --card-bg: #FEFCBF; --card-border: #F6E05E; --card-shadow: #ECC94B; --action-button-border: #276749; --action-button-shadow: #276749; --action-button-hover-shadow: #22543D; --action-button-active-shadow: #276749; --predict-button-bg: #ECC94B; --predict-button-hover-bg: #D69E2E; --predict-button-active-bg: #B7791F; --reset-button-bg: #4FD1C5; --reset-button-hover-bg: #38B2AC; --reset-button-active-bg: #319795; --result-area-bg: #FEFCBF; --result-area-border: #F6E05E; --result-area-shadow: #ECC94B; --result-text-color: #B7791F; --predicted-text-color: #744210; --thinking-text-color: #975A16; --heading-color: #2F855A; --subheading-color: #276749; --label-color: #276749; --footer-text-color: #718096; --focus-ring-color: var(--predict-button-bg); --theme-selector-bg: #FEFCBF; --theme-selector-border: #F6E05E; --theme-selector-text: #B7791F; --coin-gold: #ECC94B; --coin-silver: #CBD5E0; } /* Revert coin colors */
+        body[data-theme="cosmic-purple"] { --bg-color: #FAF5FF; --main-container-bg: #1E1B4B; --main-container-border: #A78BFA; --main-container-shadow: #A78BFA; --card-bg: #3730A3; --card-border: #C4B5FD; --card-shadow: #A78BFA; --action-button-text: #1E1B4B; --action-button-border: #A78BFA; --action-button-shadow: #A78BFA; --action-button-hover-shadow: #A78BFA; --action-button-active-shadow: #A78BFA; --predict-button-bg: #F472B6; --predict-button-hover-bg: #EC4899; --predict-button-active-bg: #DB2777; --reset-button-bg: #A78BFA; --reset-button-hover-bg: #8B5CF6; --reset-button-active-bg: #7C3AED; --result-area-bg: #4338CA; --result-area-border: #A78BFA; --result-area-shadow: #A78BFA; --result-text-color: #C4B5FD; --predicted-text-color: #EDE9FE; --thinking-text-color: #A78BFA; --heading-color: #EDE9FE; --subheading-color: #C4B5FD; --label-color: #C4B5FD; --footer-text-color: #A78BFA; --focus-ring-color: var(--predict-button-bg); --theme-selector-bg: #4338CA; --theme-selector-border: #A78BFA; --theme-selector-text: #EEF2FF; --coin-gold: #FBBF24; --coin-silver: #E5E7EB; }
+        body[data-theme="sunny-yellow"] { --bg-color: #FEF9C3; --main-container-bg: #ffffff; --main-container-border: #CA8A04; --main-container-shadow: #CA8A04; --card-bg: #FEF08A; --card-border: #FACC15; --card-shadow: #EAB308; --action-button-border: #CA8A04; --action-button-shadow: #CA8A04; --action-button-hover-shadow: #CA8A04; --action-button-active-shadow: #CA8A04; --predict-button-bg: #FB923C; --predict-button-hover-bg: #F97316; --predict-button-active-bg: #EA580C; --reset-button-bg: #FACC15; --reset-button-hover-bg: #EAB308; --reset-button-active-bg: #CA8A04; --result-area-bg: #FEF3C7; --result-area-border: #FDE047; --result-area-shadow: #EAB308; --result-text-color: #854D0E; --predicted-text-color: #713F12; --thinking-text-color: #A16207; --heading-color: #B45309; --subheading-color: #A16207; --label-color: #A16207; --footer-text-color: #B45309; --focus-ring-color: var(--predict-button-bg); --theme-selector-bg: #FEF3C7; --theme-selector-border: #FDE047; --theme-selector-text: #854D0E; --coin-gold: #F59E0B; --coin-silver: #D1D5DB; }
+        body[data-theme="candy-pink"] { --bg-color: #FDF2F8; --main-container-bg: #ffffff; --main-container-border: #9D174D; --main-container-shadow: #9D174D; --card-bg: #FCE7F3; --card-border: #F9A8D4; --card-shadow: #F472B6; --action-button-border: #9D174D; --action-button-shadow: #9D174D; --action-button-hover-shadow: #9D174D; --action-button-active-shadow: #9D174D; --predict-button-bg: #A78BFA; --predict-button-hover-bg: #8B5CF6; --predict-button-active-bg: #7C3AED; --reset-button-bg: #F472B6; --reset-button-hover-bg: #EC4899; --reset-button-active-bg: #DB2777; --result-area-bg: #FBCFE8; --result-area-border: #F9A8D4; --result-area-shadow: #F472B6; --result-text-color: #9D174D; --predicted-text-color: #831843; --thinking-text-color: #BE185D; --heading-color: #831843; --subheading-color: #BE185D; --label-color: #BE185D; --footer-text-color: #9D174D; --focus-ring-color: var(--predict-button-bg); --theme-selector-bg: #FBCFE8; --theme-selector-border: #F9A8D4; --theme-selector-text: #9D174D; --coin-gold: #F472B6; --coin-silver: #F3F4F6; }
+        body[data-theme="night-mode"] { --bg-color: #111827; --main-container-bg: #1F2937; --main-container-border: #6B7280; --main-container-shadow: #9CA3AF; --card-bg: #374151; --card-border: #9CA3AF; --card-shadow: #D1D5DB; --action-button-text: #111827; --action-button-border: #9CA3AF; --action-button-shadow: #9CA3AF; --action-button-hover-shadow: #D1D5DB; --action-button-active-shadow: #6B7280; --predict-button-bg: #60A5FA; --predict-button-hover-bg: #3B82F6; --predict-button-active-bg: #2563EB; --reset-button-bg: #34D399; --reset-button-hover-bg: #10B981; --reset-button-active-bg: #059669; --result-area-bg: #4B5563; --result-area-border: #9CA3AF; --result-area-shadow: #D1D5DB; --result-text-color: #ECFDF5; --predicted-text-color: #f0fdf4; --thinking-text-color: #D1D5DB; --heading-color: #F9FAFB; --subheading-color: #E5E7EB; --label-color: #E5E7EB; --footer-text-color: #9CA3AF; --focus-ring-color: var(--predict-button-bg); --theme-selector-bg: #4B5563; --theme-selector-border: #9CA3AF; --theme-selector-text: #F9FAFB; --coin-gold: #F59E0B; --coin-silver: #9CA3AF; }
+
+        /* --- General Styles --- */
+        html, body { height: 100%; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding-top: 5rem; /* Space for theme selector */
+            position: relative;
+            transition: background-color 0.3s ease;
+            overflow-x: hidden;
+        }
+        main { flex-grow: 1; display: flex; flex-direction: column; align-items: center; }
+
+        .main-container {
+            background-color: var(--main-container-bg);
+            border: 3px solid var(--main-container-border);
+            border-radius: 20px;
+            box-shadow: 8px 8px 0px var(--main-container-shadow);
+            width: 100%;
+            max-width: 36rem; /* Narrower container */
+            margin: 2rem auto 1rem auto; /* Default margin */
+            padding: 1.5rem sm:p-8;
+            text-align: center;
+            flex-shrink: 0;
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Action Button Styles */
+        .action-button {
+            color: var(--action-button-text); font-weight: 700; padding: 0.8rem 1.8rem; border-radius: 1rem; border: 3px solid var(--action-button-border); box-shadow: 5px 5px 0px var(--action-button-shadow); transition: all 0.15s ease-out; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 1rem; min-width: 120px; transform-style: preserve-3d;
+        }
+        .action-button:hover { box-shadow: 6px 6px 0px var(--action-button-hover-shadow); transform: translateY(-3px) translateX(-2px) translateZ(5px); }
+        .action-button:active { box-shadow: 2px 2px 0px var(--action-button-active-shadow); transform: translateY(2px) translateX(2px) translateZ(0px); }
+        .action-button:focus { outline: none; box-shadow: 5px 5px 0px var(--action-button-shadow), 0 0 0 3px var(--bg-color), 0 0 0 5px var(--focus-ring-color); }
+        .action-button:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: 5px 5px 0px var(--action-button-shadow); transform: none; }
+
+        #predictBtn { background-color: var(--predict-button-bg); border-color: var(--action-button-border); box-shadow: 5px 5px 0px var(--action-button-shadow); --focus-ring-color: var(--predict-button-bg); }
+        #predictBtn:hover:not(:disabled) { background-color: var(--predict-button-hover-bg); box-shadow: 6px 6px 0px var(--action-button-hover-shadow); }
+        #predictBtn:active:not(:disabled) { background-color: var(--predict-button-active-bg); box-shadow: 2px 2px 0px var(--action-button-active-shadow); }
+
+        #resetBtn { background-color: var(--reset-button-bg); border-color: var(--action-button-border); box-shadow: 5px 5px 0px var(--action-button-shadow); --focus-ring-color: var(--reset-button-bg); }
+        #resetBtn:hover { background-color: var(--reset-button-hover-bg); box-shadow: 6px 6px 0px var(--action-button-hover-shadow); }
+        #resetBtn:active { background-color: var(--reset-button-active-bg); box-shadow: 2px 2px 0px var(--action-button-active-shadow); }
+
+
+        /* Result Area Styles */
+        #resultArea {
+            background-color: var(--result-area-bg); border: 2px dashed var(--result-area-border); border-radius: 16px; box-shadow: 4px 4px 0px var(--result-area-shadow); padding: 1.5rem; margin-top: 2rem; min-height: 150px; text-align: center; transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; opacity: 0; transform: scale(0.9) rotate(-2deg); display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        #resultArea.visible { opacity: 1; transform: scale(1) rotate(0deg); animation: reveal 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards; }
+        #resultText { font-size: 1.3rem; font-weight: 600; color: var(--result-text-color); margin-bottom: 0.5rem; transition: color 0.3s ease; line-height: 1.4; }
+        #predictedValue { font-size: 2.5rem; font-weight: 700; margin: 0.5rem 0 1rem 0; padding: 0.5rem 1rem; border-radius: 8px; display: inline-block; color: var(--predicted-text-color); background-color: rgba(255, 255, 255, 0.3); }
+        #thinkingText { font-style: italic; color: var(--thinking-text-color); transition: color 0.3s ease; font-size: 1.1rem; margin-bottom: 1rem; }
+
+        /* Headings & Labels */
+        .main-heading { color: var(--heading-color); transition: color 0.3s ease; padding-top: 1rem; /* Default padding */ }
+        .sub-heading { color: var(--subheading-color); transition: color 0.3s ease; font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem; }
+
+        /* Coin Animation Styles */
+        .coin-container {
+            width: 100px;
+            height: 100px;
+            perspective: 1000px; /* For 3D effect */
+            margin: 1.5rem auto;
+        }
+        .coin {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.6, -0.28, 0.74, 1.28); /* Flipping transition */
+        }
+        .coin.flipping {
+            animation: spin 0.8s linear infinite; /* Spinning animation */
+        }
+        /* Stop spinning and show final state */
+        .coin.heads { transform: rotateY(0deg); animation: none; }
+        .coin.tails { transform: rotateY(180deg); animation: none; }
+
+        .coin-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Hide the back side */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: inset 0 0 10px var(--coin-shadow), 0 0 5px var(--coin-shadow);
+        }
+        .coin-front { /* Heads */
+            background: radial-gradient(circle, lighten(var(--coin-gold), 10%) 0%, var(--coin-gold) 100%);
+            color: darken(var(--coin-gold), 30%);
+        }
+        .coin-back { /* Tails */
+            background: radial-gradient(circle, lighten(var(--coin-silver), 10%) 0%, var(--coin-silver) 100%);
+            color: darken(var(--coin-silver), 30%);
+            transform: rotateY(180deg);
+        }
+
+        @keyframes spin {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(1080deg); } /* Multiple spins */
+        }
+
+
+        /* Footer Styling */
+        .page-footer { text-align: center; padding: 1rem 0; margin-top: 1rem; font-size: 0.8rem; color: var(--footer-text-color); flex-shrink: 0; line-height: 1.5; transition: color 0.3s ease; }
+        .page-footer p { margin-bottom: 0.25rem; }
+
+        /* Theme Selector Styles */
+        .theme-selector-container { position: absolute; top: 1rem; right: 1rem; z-index: 10; }
+        .theme-selector-label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
+        #themeSelector { padding: 0.4rem 0.8rem; border-radius: 8px; border: 2px solid var(--theme-selector-border); background-color: var(--theme-selector-bg); color: var(--theme-selector-text); font-weight: 500; cursor: pointer; box-shadow: 2px 2px 0px var(--theme-selector-border); transition: all 0.2s ease; vertical-align: middle; font-size: 0.8rem; }
+        #themeSelector:focus { outline: none; box-shadow: 2px 2px 0px var(--theme-selector-border), 0 0 0 3px var(--main-container-bg), 0 0 0 5px var(--theme-selector-border); }
+
+        /* Dark Theme Adjustments */
+        body[data-theme="cosmic-purple"] .main-heading svg,
+        body[data-theme="night-mode"] .main-heading svg { color: #F687B3; /* pink-400 */ }
+        body[data-theme="cosmic-purple"] .sub-heading,
+        body[data-theme="night-mode"] .sub-heading { color: #D1D5DB; }
+        body[data-theme="cosmic-purple"] #themeSelector:focus,
+        body[data-theme="night-mode"] #themeSelector:focus { box-shadow: 2px 2px 0px var(--theme-selector-border), 0 0 0 3px var(--main-container-bg), 0 0 0 5px var(--theme-selector-border); }
+        body[data-theme="cosmic-purple"] #predictedValue,
+        body[data-theme="night-mode"] #predictedValue { background-color: rgba(0, 0, 0, 0.2); color: #FFF; }
+
+
+        /* Hide class utility */
+        .hidden { display: none; }
+
+        /* Animation for result reveal */
+        @keyframes reveal { from { transform: scale(0.8) rotate(-5deg); opacity: 0; } to { transform: scale(1) rotate(0deg); opacity: 1; } }
+
+    </style>
+</head>
+<body class="p-4 md:p-6">
+
+    <div class="theme-selector-container">
+        <label for="themeSelector" class="theme-selector-label">Choose a Theme:</label>
+        <select id="themeSelector">
+            <option value="default">🎨 Default</option>
+            <option value="ocean-blue">🌊 Ocean Blue</option>
+            <option value="forest-green">🌲 Forest Green</option>
+            <option value="cosmic-purple">✨ Cosmic Purple</option>
+            <option value="sunny-yellow">☀️ Sunny Yellow</option>
+            <option value="candy-pink">🍬 Candy Pink</option>
+            <option value="night-mode">🌙 Night Mode</option>
+        </select>
+    </div>
+
+    <main>
+        <div class="main-container">
+            <h1 class="main-heading text-3xl sm:text-4xl font-bold text-center mb-4 tracking-tight flex items-center justify-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-9 h-9 text-purple-600">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+                </svg>
+                 Virtual Coin Mentalist <span class="text-2xl">🪙</span>
+            </h1>
+
+            <p class="sub-heading text-center mb-8">Think of **Heads** or **Tails**. Concentrate... 🧠 Now, let the Mentalist read your mind!</p>
+
+            <div id="initialState">
+                <button id="predictBtn" class="action-button mt-6">🔮 Reveal My Thought!</button>
+            </div>
+
+            <div id="coinArea" class="hidden mt-6 mb-6">
+                 <p id="flippingText" class="text-lg font-semibold mb-4" style="color: var(--subheading-color);"></p>
+                 <div class="coin-container">
+                    <div id="coin" class="coin">
+                        <div class="coin-face coin-front">H</div> <div class="coin-face coin-back">T</div>  </div>
+                 </div>
+            </div>
+
+
+            <div id="resultArea" class="hidden">
+                <p id="thinkingText">✨ Peering into your thoughts...</p>
+                <p id="resultText"></p>
+                <div id="predictedValue" class="hidden">VALUE</div>
+                <button id="resetBtn" class="action-button mt-4">Play Again? 🔁</button>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="page-footer">
+        <p>© 2025 ToolForge. All rights reserved.</p>
+        <p>Built with ❤️ by Anas.</p>
+    </footer>
+
+    <script>
+        // --- DOM Elements ---
+        const initialStateDiv = document.getElementById('initialState');
+        const coinAreaDiv = document.getElementById('coinArea');
+        const coinElement = document.getElementById('coin');
+        const flippingText = document.getElementById('flippingText');
+        const resultArea = document.getElementById('resultArea');
+        const thinkingText = document.getElementById('thinkingText');
+        const resultText = document.getElementById('resultText');
+        const predictedValueDiv = document.getElementById('predictedValue');
+        const predictBtn = document.getElementById('predictBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const themeSelector = document.getElementById('themeSelector');
+
+        // --- Game State ---
+        let predictionTimeout; // To store the timeout ID
+
+        // --- Functions ---
+
+        /** Handles the click to start prediction */
+        function startPrediction() {
+            initialStateDiv.classList.add('hidden');
+            resultArea.classList.add('hidden'); // Ensure result is hidden
+            resultArea.classList.remove('visible');
+            coinAreaDiv.classList.remove('hidden');
+            flippingText.textContent = "Flipping the mystic coin...";
+            coinElement.classList.remove('heads', 'tails'); // Reset final state
+            coinElement.classList.add('flipping'); // Start animation
+
+            // Disable button during animation
+            predictBtn.disabled = true;
+
+            // Simulate prediction after animation
+            const flipDuration = 2000; // Duration of the flip animation + thinking (milliseconds)
+            clearTimeout(predictionTimeout); // Clear any existing timeout
+            predictionTimeout = setTimeout(() => {
+                revealPrediction();
+            }, flipDuration);
+        }
+
+        /** Reveals the prediction */
+        function revealPrediction() {
+            coinElement.classList.remove('flipping'); // Stop spinning animation
+
+            // Simple "AI" prediction (random guess)
+            const guess = Math.random() < 0.5 ? 'Heads' : 'Tails';
+            const guessEmoji = guess === 'Heads' ? '🪙 H' : '🪙 T';
+
+            // Set the coin to the final predicted state
+            if (guess === 'Heads') {
+                coinElement.classList.add('heads');
+            } else {
+                coinElement.classList.add('tails');
+            }
+
+             // Short delay after coin stops before showing text result
+            setTimeout(() => {
+                coinAreaDiv.classList.add('hidden'); // Hide coin area
+                resultArea.classList.remove('hidden'); // Show result area
+                predictedValueDiv.classList.add('hidden'); // Hide previous value if any
+                thinkingText.textContent = '✨ The coin has spoken... ✨';
+                thinkingText.style.display = 'block';
+                resultArea.classList.remove('visible'); // Prepare for animation
+
+                setTimeout(() => {
+                    thinkingText.style.display = 'none';
+                    resultText.textContent = "The Mentalist predicts you were thinking of...";
+                    predictedValueDiv.textContent = guess; // Display "Heads" or "Tails"
+                    predictedValueDiv.classList.remove('hidden');
+                    resultArea.classList.add('visible'); // Trigger animation
+                    predictBtn.disabled = false; // Re-enable button if needed (though it's hidden now)
+                }, 800); // Delay for showing text result
+
+            }, 400); // Delay after coin stops spinning
+
+        }
+
+
+        /** Resets the game to its initial state. */
+        function resetGame() {
+            clearTimeout(predictionTimeout); // Clear any pending prediction reveal
+
+            initialStateDiv.classList.remove('hidden');
+            coinAreaDiv.classList.add('hidden');
+            resultArea.classList.add('hidden');
+            resultArea.classList.remove('visible');
+            predictedValueDiv.classList.add('hidden');
+            coinElement.classList.remove('flipping', 'heads', 'tails'); // Reset coin state
+            predictBtn.disabled = false; // Ensure button is enabled
+        }
+
+        // --- Theme Switching Logic (With localStorage) ---
+        function applyTheme(themeName) {
+            document.body.dataset.theme = themeName;
+            try { localStorage.setItem('coinMentalistTheme', themeName); }
+            catch (e) { console.warn("Could not save theme preference:", e); }
+        }
+
+        function loadSavedTheme() {
+            let savedTheme = 'default';
+            try { savedTheme = localStorage.getItem('coinMentalistTheme') || 'default'; }
+            catch (e) { console.warn("Could not load theme preference:", e); }
+            themeSelector.value = savedTheme;
+            applyTheme(savedTheme);
+        }
+
+        themeSelector.addEventListener('change', (event) => applyTheme(event.target.value));
+
+        // --- Event Listeners ---
+        predictBtn.addEventListener('click', startPrediction);
+        resetBtn.addEventListener('click', resetGame);
+
+        // --- Initial Load ---
+        loadSavedTheme();
+        resetGame(); // Initialize game state
+
+    </script>
+
+</body>
+</html>
